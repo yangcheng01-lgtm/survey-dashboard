@@ -557,7 +557,7 @@
     <div class="container">
         <div class="header">
             <h1>📊 商用出行 2026H1 问卷回收进展看板</h1>
-            <p>每周更新各业务组问卷回收进度 —— 2026/4/29</p>
+            <p>每周更新各业务组问卷回收进度 —— 2026/5/7</p>
         </div>
 
         <div class="summary-cards">
@@ -612,7 +612,7 @@
                     调研开始
                 </div>
                 <div class="timeline-date">
-                    <strong>4 月 29 日</strong>
+                    <strong>5 月 7 日</strong>
                     当前日期
                 </div>
                 <div class="timeline-date">
@@ -628,7 +628,7 @@
         </div>
 
         <div class="analysis-section">
-            <h2 class="section-title">🔍 问卷初步分析（5份已回收）</h2>
+            <h2 class="section-title">🔍 问卷初步分析（7份已回收）</h2>
 
             <div class="satisfaction-grid" id="satGrid"></div>
 
@@ -645,16 +645,16 @@
 
     <script>
         const data = [
-            { team: '欧美一组', collected: 1, h1Target: 10 },
+            { team: '欧美一组', collected: 0, h1Target: 10 },
             { team: '欧美二组', collected: 3, h1Target: 15 },
-            { team: '亚太一组', collected: 1, h1Target: 15 },
+            { team: '亚太一组', collected: 3, h1Target: 15 },
             { team: '亚太二组', collected: 0, h1Target: 15 },
-            { team: '欧美三组', collected: 0, h1Target: 15 }
+            { team: '欧美三组', collected: 1, h1Target: 15 }
         ];
 
         const surveyStartDate = new Date('2026-04-15');
         const surveyEndDate = new Date('2026-05-31');
-        const currentDate = new Date('2026-04-29');
+        const currentDate = new Date('2026-05-07');
 
         const totalDays = (surveyEndDate - surveyStartDate) / (1000 * 60 * 60 * 24);
         const elapsedDays = (currentDate - surveyStartDate) / (1000 * 60 * 60 * 24);
@@ -755,7 +755,9 @@
             { packaging: 3, unboxing: 4, quality: 2, functions: 4, performance: 4, riding: 4, om: 3, firmware: null, docs: 1, issue: 4, spare: null },
             { packaging: 3, unboxing: 4, quality: 3, functions: 4, performance: 3, riding: 4, om: 4, firmware: 4, docs: 3, issue: 4, spare: null },
             { packaging: 3, unboxing: 4, quality: 4, functions: 5, performance: 4, riding: 4, om: 3, firmware: 4, docs: 4, issue: 4, spare: 3 },
-            { packaging: 5, unboxing: 4, quality: 5, functions: 5, performance: 5, riding: 4, om: 4, firmware: 4, docs: 4, issue: 5, spare: 3 }
+            { packaging: 5, unboxing: 4, quality: 5, functions: 5, performance: 5, riding: 4, om: 4, firmware: 4, docs: 4, issue: 5, spare: 3 },
+            { packaging: null, unboxing: null, quality: 3, functions: 3, performance: 2, riding: 3, om: 4, firmware: 3, docs: 3, issue: 3, spare: null },
+            { packaging: 4, unboxing: 4, quality: 4, functions: 5, performance: 4, riding: 5, om: null, firmware: null, docs: 4, issue: 4, spare: 4 }
         ];
 
         const dimLabels = [
@@ -811,22 +813,22 @@
                 level: 'critical',
                 tag: '严重',
                 title: '技术文档 - 交付不及时且实用性不足',
-                detail: 'SOP、技术支持和工具等文档未按时交付；九号似乎没有标准化文档模板，客户每次都需要重复索要',
-                source: '客户B (Dott/欧美二组)'
+                detail: 'SOP、技术支持和工具等文档未按时交付；无标准化文档模板；需增加扭矩规格等概览信息',
+                source: '客户B & F (Dott/欧美二组 & Check/欧美三组)'
             },
             {
                 level: 'warning',
                 tag: '关注',
-                title: '产品性能 - 续航与防水问题',
-                detail: '新车型短骑行率高于旧车型；B200电池连接器出现腐蚀；初始耗电率偏高',
-                source: '客户C (Dott/欧美二组)'
+                title: '产品性能 - 续航虚标与能耗过高',
+                detail: '实际能耗远高于宣传值；新车型短骑行率高于旧车型；最高速行驶不平稳；B200电池连接器腐蚀',
+                source: '客户C & F (Dott/欧美二组 & Check/欧美三组)'
             },
             {
                 level: 'warning',
                 tag: '关注',
-                title: '产品质量 - 结构耐久性',
-                detail: 'Apex电池锁/盖易被打开导致电池被盗；B200自由轮问题；结构件异常响声、松动、变形',
-                source: '客户C (Dott/欧美二组)'
+                title: '产品质量 - 故障率与耐久性',
+                detail: '后自由轮过早损坏；电池充电时漏水；充电器裸露插脚设计不安全；Apex电池锁/盖易被打开；结构件异常响声、松动',
+                source: '客户C & F (Dott/欧美二组 & Check/欧美三组)'
             },
             {
                 level: 'warning',
@@ -840,7 +842,21 @@
                 tag: '关注',
                 title: '备件服务 - 交付周期长且流程复杂',
                 detail: '备件和工具交付周期较长，订购流程复杂、响应速度慢；出货存在价格、数量和文档错误；应确保备件与车辆同步到达市场',
-                source: '客户D & E (Dott/欧美二组 & Jet/欧美一组)'
+                source: '客户D & E (Dott/欧美二组 & Jet/亚太一组)'
+            },
+            {
+                level: 'warning',
+                tag: '关注',
+                title: '固件定制 - 更新推送不主动',
+                detail: '新固件不主动推送，客户需自行询问；加速和助力模式的定制化选项不足',
+                source: '客户F (Check/欧美三组)'
+            },
+            {
+                level: 'warning',
+                tag: '关注',
+                title: '问题解决 - 缺乏后续跟进',
+                detail: '后自由轮和能耗问题提交后无后续跟进处理',
+                source: '客户F (Check/欧美三组)'
             },
             {
                 level: 'info',

@@ -375,6 +375,46 @@
             display: none;
         }
 
+        .weekly-new-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            background: #dbeafe;
+            color: #1d4ed8;
+            margin-left: 8px;
+        }
+
+        .weekly-new-badge::before {
+            content: '▲';
+            font-size: 0.65rem;
+        }
+
+        .progress-bar.weekly-new {
+            border: 2px solid #2563eb;
+            box-shadow: 0 0 20px rgba(37,99,235,0.6);
+        }
+
+        .issue-new-tag {
+            display: inline-block;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            background: #dbeafe;
+            color: #1d4ed8;
+            margin-left: 4px;
+        }
+
+        .issue-btn-active {
+            background: #2563eb !important;
+            color: #fff !important;
+            border-color: #2563eb !important;
+        }
+
         .rank-badge {
             display: inline-flex;
             align-items: center;
@@ -633,8 +673,10 @@
             <div class="satisfaction-grid" id="satGrid"></div>
 
             <div class="issue-list">
-                <h3 style="color:#1f2937;font-weight:600;margin-bottom:15px;font-size:1.1rem;">⚠️ 重点问题汇总</h3>
-                <div id="issueList"></div>
+                <h3 style="color:#1f2937;font-weight:600;margin-bottom:15px;font-size:1.1rem;display:flex;align-items:center;gap:12px;">⚠️ 重点问题汇总
+                <button id="issueFilterBtn" onclick="toggleIssueFilter()" style="padding:4px 12px;border-radius:8px;font-size:0.75rem;font-weight:600;border:1px solid #d1d5db;background:#fff;color:#4b5563;cursor:pointer;transition:all 0.2s;">本周新增</button>
+            </h3>
+            <div id="issueList"></div>
             </div>
         </div>
 
@@ -645,11 +687,11 @@
 
     <script>
         const data = [
-            { team: '欧美一组', collected: 0, h1Target: 10 },
-            { team: '欧美二组', collected: 3, h1Target: 15 },
-            { team: '亚太一组', collected: 3, h1Target: 15 },
-            { team: '亚太二组', collected: 0, h1Target: 15 },
-            { team: '欧美三组', collected: 1, h1Target: 15 }
+            { team: '欧美一组', collected: 0, h1Target: 10, weeklyGain: 0 },
+            { team: '欧美二组', collected: 3, h1Target: 15, weeklyGain: 0 },
+            { team: '亚太一组', collected: 3, h1Target: 15, weeklyGain: 1 },
+            { team: '亚太二组', collected: 0, h1Target: 15, weeklyGain: 0 },
+            { team: '欧美三组', collected: 1, h1Target: 15, weeklyGain: 1 }
         ];
 
         const surveyStartDate = new Date('2026-04-15');
@@ -725,11 +767,12 @@
             const progressClass = getProgressClass(rate);
 
             progressHTML += `
-                <div class="progress-item">
+                <div class="progress-item${item.weeklyGain > 0 ? ' weekly-gain' : ''}">
                     <div class="progress-header">
                         <div class="team-row">
                             ${getRankBadge(index + 1)}
                             <span class="team-name">${item.team}</span>
+                            ${item.weeklyGain > 0 ? `<span class="weekly-new-badge">+${item.weeklyGain}</span>` : ''}
                         </div>
                         <div class="progress-stats">
                             <span class="stat stat-current">✓ ${item.collected}</span>
@@ -737,7 +780,7 @@
                         </div>
                     </div>
                     <div class="progress-bar-container">
-                        <div class="progress-bar ${progressClass}" style="width: ${rate}%;">
+                        <div class="progress-bar ${progressClass}${item.weeklyGain > 0 ? ' weekly-new' : ''}" style="width: ${rate}%;">
                             <span class="progress-bar-label">${rate}%</span>
                         </div>
                     </div>
@@ -805,6 +848,7 @@
             {
                 level: 'critical',
                 tag: '严重',
+                isNew: false,
                 title: '产品质量 - 前叉问题',
                 detail: '前叉未正确紧固，导致重大生产失误，严重影响客户上线计划',
                 source: '客户B (Dott/欧美二组)'
@@ -812,6 +856,7 @@
             {
                 level: 'critical',
                 tag: '严重',
+                isNew: true,
                 title: '技术文档 - 交付不及时且实用性不足',
                 detail: 'SOP、技术支持和工具等文档未按时交付；无标准化文档模板；需增加扭矩规格等概览信息',
                 source: '客户B & F (Dott/欧美二组 & Check/欧美三组)'
@@ -819,6 +864,7 @@
             {
                 level: 'warning',
                 tag: '关注',
+                isNew: true,
                 title: '产品性能 - 续航虚标与能耗过高',
                 detail: '实际能耗远高于宣传值；新车型短骑行率高于旧车型；最高速行驶不平稳；B200电池连接器腐蚀',
                 source: '客户C & F (Dott/欧美二组 & Check/欧美三组)'
@@ -826,6 +872,7 @@
             {
                 level: 'warning',
                 tag: '关注',
+                isNew: true,
                 title: '产品质量 - 故障率与耐久性',
                 detail: '后自由轮过早损坏；电池充电时漏水；充电器裸露插脚设计不安全；Apex电池锁/盖易被打开；结构件异常响声、松动',
                 source: '客户C & F (Dott/欧美二组 & Check/欧美三组)'
@@ -833,6 +880,7 @@
             {
                 level: 'warning',
                 tag: '关注',
+                isNew: false,
                 title: '运维体验 - 维护效率低',
                 detail: '前叉和线缆拆装流程效率不足；ECU舱线缆管理不理想；日常维护效率、故障排查和备件更换均有提升空间',
                 source: '客户B & D (Dott/欧美二组)'
@@ -840,6 +888,7 @@
             {
                 level: 'warning',
                 tag: '关注',
+                isNew: false,
                 title: '备件服务 - 交付周期长且流程复杂',
                 detail: '备件和工具交付周期较长，订购流程复杂、响应速度慢；出货存在价格、数量和文档错误；应确保备件与车辆同步到达市场',
                 source: '客户D & E (Dott/欧美二组 & Jet/亚太一组)'
@@ -847,6 +896,7 @@
             {
                 level: 'warning',
                 tag: '关注',
+                isNew: true,
                 title: '固件定制 - 更新推送不主动',
                 detail: '新固件不主动推送，客户需自行询问；加速和助力模式的定制化选项不足',
                 source: '客户F (Check/欧美三组)'
@@ -854,6 +904,7 @@
             {
                 level: 'warning',
                 tag: '关注',
+                isNew: true,
                 title: '问题解决 - 缺乏后续跟进',
                 detail: '后自由轮和能耗问题提交后无后续跟进处理',
                 source: '客户F (Check/欧美三组)'
@@ -861,22 +912,38 @@
             {
                 level: 'info',
                 tag: '建议',
+                isNew: false,
                 title: '包装体验 - 包装材料过多',
                 detail: '包装材料量大、占用仓库空间，需要多条分拣线处理，回收成本高',
                 source: '客户B, C & D (Dott/欧美二组)'
             }
         ];
 
-        let issueHTML = '';
-        issues.forEach(i => {
-            issueHTML += `<div class="issue-item ${i.level}">
-                <span class="issue-tag ${i.level}">${i.tag}</span>
+        let showNewOnly = false;
+
+        function toggleIssueFilter() {
+            showNewOnly = !showNewOnly;
+            const btn = document.getElementById('issueFilterBtn');
+            btn.textContent = showNewOnly ? '所有' : '本周新增';
+            btn.classList.toggle('issue-btn-active', showNewOnly);
+            renderIssues();
+        }
+
+        function renderIssues() {
+            const filtered = showNewOnly ? issues.filter(i => i.isNew) : issues;
+            let html = '';
+            filtered.forEach(i => {
+                html += `<div class="issue-item ${i.level}">
+                <span class="issue-tag ${i.level}">${i.tag}</span>${i.isNew ? '<span class="issue-new-tag">新增</span>' : ''}
                 <div class="issue-title">${i.title}</div>
                 <div class="issue-detail">${i.detail}</div>
                 <div class="issue-source">来源：${i.source}</div>
             </div>`;
-        });
-        document.getElementById('issueList').innerHTML = issueHTML;
+            });
+            document.getElementById('issueList').innerHTML = html;
+        }
+
+        renderIssues();
     </script>
 </body>
 </html>

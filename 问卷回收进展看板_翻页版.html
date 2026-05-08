@@ -258,7 +258,7 @@
     <div class="container">
         <div class="header">
             <h1>📊 商用出行 2026H1 问卷回收进展看板</h1>
-            <p>每周更新各业务组问卷回收进度 —— 2026/5/7</p>
+            <p>每周更新各业务组问卷回收进度 —— 2026/5/8</p>
         </div>
 
         <div class="page-nav">
@@ -318,7 +318,7 @@
                 </div>
                 <div class="timeline-dates">
                     <div class="timeline-date"><strong>4 月 15 日</strong>调研开始</div>
-                    <div class="timeline-date"><strong>5 月 7 日</strong>当前日期</div>
+                    <div class="timeline-date"><strong>5 月 8 日</strong>当前日期</div>
                     <div class="timeline-date"><strong>5 月 31 日</strong>调研截止</div>
                 </div>
             </div>
@@ -393,7 +393,7 @@
 
         const surveyStartDate = new Date('2026-04-15');
         const surveyEndDate = new Date('2026-05-31');
-        const currentDate = new Date('2026-05-07');
+        const currentDate = new Date('2026-05-08');
 
         const totalDays = (surveyEndDate - surveyStartDate) / (1000 * 60 * 60 * 24);
         const elapsedDays = (currentDate - surveyStartDate) / (1000 * 60 * 60 * 24);
@@ -507,11 +507,15 @@
         ];
 
         function getScoreColor(avg) {
-            if (avg >= 4.5) return '#059669';
+            if (avg >= 4.0) return '#059669';
             if (avg >= 3.5) return '#2563eb';
-            if (avg >= 2.5) return '#d97706';
-            if (avg >= 1.5) return '#dc2626';
-            return '#991b1b';
+            return '#dc2626';
+        }
+
+        function getScoreTier(avg) {
+            if (avg >= 4.0) return '优';
+            if (avg >= 3.5) return '中';
+            return '低';
         }
 
         let satHTML = '';
@@ -521,9 +525,10 @@
             const avgNum = avg === 'N/A' ? 0 : parseFloat(avg);
             const pct = avg === 'N/A' ? 0 : (avgNum / 5) * 100;
             const color = getScoreColor(avgNum);
+            const tier = getScoreTier(avgNum);
             satHTML += `<div class="satisfaction-card">
                 <div class="satisfaction-card-title">${d.name}<br><span style="color:#9ca3af;font-size:0.7rem">${d.en}</span></div>
-                <div class="satisfaction-score" style="color:${avg === 'N/A' ? '#9ca3af' : color}">${avg}</div>
+                <div class="satisfaction-score" style="color:${avg === 'N/A' ? '#9ca3af' : color}">${avg === 'N/A' ? avg : avg + ' <span style="font-size:0.6rem;opacity:0.8">' + tier + '</span>'}</div>
                 <div class="satisfaction-meta">${avg === 'N/A' ? '无有效评分' : `${scores.length} 份有效 / 5分满分`}</div>
                 <div class="satisfaction-score-bar"><div class="satisfaction-score-fill" style="width:${pct}%;background:${avg === 'N/A' ? '#e5e7eb' : color}"></div></div>
             </div>`;

@@ -216,6 +216,11 @@
         .issue-en-text.new-en { background: #dbeafe; color: #1d4ed8; }
         .detail-new { background: #dbeafe; color: #1d4ed8; padding: 1px 4px; border-radius: 3px; font-weight: 600; font-size: 0.8rem; }
 
+        .positive-item { background: rgba(255,255,255,0.6); border-radius: 10px; padding: 12px; margin-bottom: 10px; border-left: 3px solid #10b981; cursor: pointer; transition: all 0.2s ease; }
+        .positive-item:hover { background: rgba(255,255,255,0.8); }
+        .positive-tag { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; margin-right: 6px; background: #d1fae5; color: #047857; }
+        .positive-tag.great { background: #ecfdf5; color: #059669; }
+
         .footer-note { margin-top: 14px; text-align: center; }
         .footer-note p { color: #4b5563; font-size: 0.8rem; }
 
@@ -341,6 +346,12 @@
                 <div class="satisfaction-grid" id="satGrid"></div>
             </div>
             <div class="glass-card">
+                <div class="positive-list">
+                    <h3 style="color:#1f2937;font-weight:600;margin-bottom:12px;font-size:1rem;display:flex;align-items:center;gap:8px;">👍 客户好评汇总</h3>
+                    <div id="positiveList"></div>
+                </div>
+            </div>
+            <div class="glass-card">
                 <div class="issue-list">
                     <h3 style="color:#1f2937;font-weight:600;margin-bottom:12px;font-size:1rem;display:flex;align-items:center;gap:8px;">⚠️ 重点问题汇总
                     <button id="issueFilterBtn" onclick="toggleIssueFilter()" style="padding:3px 10px;border-radius:6px;font-size:0.7rem;font-weight:600;border:1px solid #d1d5db;background:#fff;color:#4b5563;cursor:pointer;transition:all 0.2s;">切换为本周新增</button>
@@ -387,7 +398,7 @@
         const data = [
             { team: '欧美一组', collected: 0, h1Target: 10, weeklyGain: 0 },
             { team: '欧美二组', collected: 3, h1Target: 15, weeklyGain: 0 },
-            { team: '亚太一组', collected: 3, h1Target: 15, weeklyGain: 1 },
+            { team: '亚太一组', collected: 3, h1Target: 15, weeklyGain: 2 },
             { team: '亚太二组', collected: 0, h1Target: 15, weeklyGain: 0 },
             { team: '欧美三组', collected: 1, h1Target: 15, weeklyGain: 1 }
         ];
@@ -569,6 +580,35 @@
             { level: 'info', tag: '建议', hasNew: false, title: '包装体验 - 包装材料过多', detail: '包装材料量大、占用仓库空间，需要多条分拣线处理，回收成本高',
               feedbacks: [{ customer: 'Dott', isNew: false, enOriginal: 'Too much packaging material / Packaging requires multiple sorting lines for disposal, which take up a lot of space. Also, the volume of packaging material generated is very high, taking space in the warehouse, and requiring more cost and effort to recycle/dispose.' }] }
         ];
+
+        // 客户好评汇总
+        const positives = [
+            { tag: '全优', isNew: true, customer: 'Whoosh', title: '整体满意度优秀', detail: '全维度 Very Satisfied (5分)，零投诉，仅备件服务为 Satisfied (4分)', enOriginal: 'All dimensions rated Very Satisfied (5/5), zero complaints. Spare parts rated Satisfied (4/5).' },
+            { tag: '好评', isNew: true, customer: 'Jet', title: '包装/质量/功能/性能/问题解决均 Very Satisfied', detail: '包装、产品质量、产品功能、产品性能、问题解决均获5分满分', enOriginal: 'Packaging, product quality, product functions, product performance, and issue resolution all rated Very Satisfied (5/5).' },
+            { tag: '认可', isNew: true, customer: 'Check', title: '技术文档 - 维修说明详细', detail: '维修说明解释得很详细，客户表示满意', enOriginal: 'Repairs are explained in a detailed way, we are happy with that.' },
+            { tag: '认可', isNew: false, customer: 'Dott', title: '备件服务 - 合作意愿积极', detail: 'Veeti表示并非不满意，而是希望两家公司更好地协作改进', enOriginal: 'It is not that I am dissatisfied with the service, I just mean that we should have open discussion on how to make it work better in the future！ It should be collaboration between the companies.' }
+        ];
+
+        // 渲染好评
+        function renderPositives() {
+            let html = '';
+            positives.forEach(p => {
+                const customerDisplay = p.isNew ? `<span style="background:#dbeafe;color:#1d4ed8;padding:1px 5px;border-radius:3px;font-size:0.7rem;font-weight:600;">${p.customer}</span>` : p.customer;
+                const tagClass = p.tag === '全优' ? 'great' : '';
+                html += `<div class="positive-item" onclick="toggleIssue(this)">
+                    <span class="issue-expand-icon">▶</span>
+                    <span class="positive-tag ${tagClass}">${p.tag}</span>
+                    <div class="issue-title">${p.title}</div>
+                    <div class="issue-detail">${p.detail}</div>
+                    <div class="issue-source">客户：${customerDisplay}</div>
+                    <div class="issue-en-section">
+                        <div class="issue-en-text ${p.isNew ? 'new-en' : ''}">${p.customer}：${p.enOriginal}</div>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('positiveList').innerHTML = html;
+        }
+        renderPositives();
 
         let showNewOnly = false;
 

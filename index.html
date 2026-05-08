@@ -541,7 +541,7 @@
             satHTML += `<div class="satisfaction-card">
                 <div class="satisfaction-card-title">${d.name}<br><span style="color:#9ca3af;font-size:0.7rem">${d.en}</span></div>
                 <div class="satisfaction-score" style="color:${avg === 'N/A' ? '#9ca3af' : color}">${avg === 'N/A' ? avg : avg + ' <span style="font-size:0.6rem;opacity:0.8">' + tier + '</span>'}</div>
-                <div class="satisfaction-meta">${avg === 'N/A' ? '无有效评分' : `${scores.length} 份有效 / 5分满分`}</div>
+                <div class="satisfaction-meta">${avg === 'N/A' ? '无有效评分' : `${scores.length} 份有效`}</div>
                 <div class="satisfaction-score-bar"><div class="satisfaction-score-fill" style="width:${pct}%;background:${avg === 'N/A' ? '#e5e7eb' : color}"></div></div>
             </div>`;
         });

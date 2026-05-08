@@ -214,6 +214,7 @@
         .issue-item.expanded .issue-en-section { display: block; }
         .issue-en-text { color: #4b5563; font-size: 0.75rem; line-height: 1.4; padding: 6px 10px; border-radius: 6px; margin-top: 4px; font-family: 'Segoe UI', 'Consolas', monospace; }
         .issue-en-text.new-en { background: #dbeafe; color: #1d4ed8; }
+        .detail-new { background: #dbeafe; color: #1d4ed8; padding: 1px 4px; border-radius: 3px; font-weight: 600; font-size: 0.8rem; }
 
         .footer-note { margin-top: 14px; text-align: center; }
         .footer-note p { color: #4b5563; font-size: 0.8rem; }
@@ -539,31 +540,31 @@
         const issues = [
             { level: 'critical', tag: '严重', hasNew: false, title: '产品质量 - 前叉问题', detail: '前叉未正确紧固，导致重大生产失误，严重影响客户上线计划',
               feedbacks: [{ customer: 'Dott', isNew: false, enOriginal: 'Front fork issue is a big production error by NineBot. This should not have happened. It significantly impact our launch.' }] },
-            { level: 'critical', tag: '严重', hasNew: true, title: '技术文档 - 交付不及时且实用性不足', detail: 'SOP、技术支持和工具等文档未按时交付；无标准化文档模板；需增加扭矩规格等概览信息',
+            { level: 'critical', tag: '严重', hasNew: true, title: '技术文档 - 交付不及时且实用性不足', detail: 'SOP、技术支持和工具等文档未按时交付；无标准化文档模板；<span class="detail-new">需增加扭矩规格等概览信息</span>',
               feedbacks: [
                 { customer: 'Dott', isNew: false, enOriginal: 'SOPs, technical support, tools, etc... were all asked ahead of time and ninebot did not deliver on this. / It does not appear that Ninebot has a standard template for documentation - we have to request certain information or details every time even though it was provided in the past with older models (the expectation generally is if we received it in the past, we should be getting it again automatically?) Also documentation should be provided well enough in advance to allow for internal review and training of our teams.' },
                 { customer: 'Check', isNew: true, enOriginal: 'Would like to see one overview of torque specs' }
               ] },
-            { level: 'warning', tag: '关注', hasNew: true, title: '产品性能 - 续航虚标与能耗过高', detail: '新车型短骑行率高于旧车型；B200电池连接器腐蚀；实际能耗远高于宣传值；最高速行驶不平稳',
+            { level: 'warning', tag: '关注', hasNew: true, title: '产品性能 - 续航虚标与能耗过高', detail: '新车型短骑行率高于旧车型；B200电池连接器腐蚀；<span class="detail-new">实际能耗远高于宣传值；最高速行驶不平稳</span>',
               feedbacks: [
                 { customer: 'Dott', isNew: false, enOriginal: 'Our initial drainage rates on the new products are higher than the older models. This should be fixed by low power mode, but to be confirmed. Also, our new vehicles are experiencing higher number of short rides vs our older models, which should be the other way around. on B200 bikes water is already causing corrosion on our battery connectors' },
                 { customer: 'Check', isNew: true, enOriginal: 'Driving at top speed has too much cadence and is not smooth. Energy consumption is way higher than advertised' }
               ] },
-            { level: 'warning', tag: '关注', hasNew: true, title: '产品质量 - 故障率与耐久性', detail: 'Apex电池锁/盖易被打开；后自由轮过早损坏；结构件异常响声、松动；电池充电时漏水；充电器裸露插脚设计不安全',
+            { level: 'warning', tag: '关注', hasNew: true, title: '产品质量 - 故障率与耐久性', detail: 'Apex电池锁/盖易被打开；后自由轮过早损坏；结构件异常响声、松动；<span class="detail-new">电池充电时漏水；充电器裸露插脚设计不安全</span>',
               feedbacks: [
                 { customer: 'Dott', isNew: false, enOriginal: 'Apex - Batteries are being stolen because the lock/lid is easy to open, the Front forks were not correctly tightened during production, which caused a significant impact, B200 have freewheel issues, including other durability issues.' },
                 { customer: 'Check', isNew: true, enOriginal: 'Rear freewheel is breaking too soon & battery has water dripping out when charging horizontally, also the charger design is not safe with the exposed pins forcing us to create custom shelving.' }
               ] },
             { level: 'warning', tag: '关注', hasNew: false, title: '运维体验 - 维护效率低', detail: '前叉和线缆拆装流程效率不足；ECU舱线缆管理不理想；日常维护效率、故障排查和备件更换均有提升空间',
               feedbacks: [{ customer: 'Dott', isNew: false, enOriginal: 'The vehicles are still hard to correctly maintain in our operations / Disassembly procedures for front fork and cabling are inefficient and could be developed further. Also ECU compartment cable management is dissatisfactory' }] },
-            { level: 'warning', tag: '关注', hasNew: true, title: '备件服务 - 交付周期长且流程复杂', detail: '备件和工具交付周期较长，应确保备件与车辆同步到达市场；订购流程复杂、响应速度慢；出货存在价格、数量和文档错误',
+            { level: 'warning', tag: '关注', hasNew: true, title: '备件服务 - 交付周期长且流程复杂', detail: '备件和工具交付周期较长，应确保备件与车辆同步到达市场；<span class="detail-new">订购流程复杂、响应速度慢；出货存在价格、数量和文档错误</span>',
               feedbacks: [
                 { customer: 'Dott', isNew: false, enOriginal: 'It is taking a long time to receive the parts and tools - of course the issue is not entirely at Ninebot end, our team was being slow with the PO as well. But lets try to make sure we start planning getting the spare parts to markets at the same time when the vehicles arrive.' },
                 { customer: 'Jet', isNew: true, enOriginal: '1. Complexity and speed of spare parts ordering 2. Response speed 3. Loyalty and problem-solving approach 4. Errors in shipments, ranging from pricing and quantities to documentation mistakes' }
               ] },
-            { level: 'warning', tag: '关注', hasNew: true, title: '固件定制 - 更新推送不主动', detail: '新固件不主动推送，客户需自行询问；加速和助力模式的定制化选项不足',
+            { level: 'warning', tag: '关注', hasNew: true, title: '固件定制 - 更新推送不主动', detail: '<span class="detail-new">新固件不主动推送，客户需自行询问；加速和助力模式的定制化选项不足</span>',
               feedbacks: [{ customer: 'Check', isNew: true, enOriginal: 'New firmware is not pushed proactively, we have to ask for updates / We would like to have more customisation options in terms of acceleration and assistance modes' }] },
-            { level: 'warning', tag: '关注', hasNew: true, title: '问题解决 - 缺乏后续跟进', detail: '后自由轮和能耗问题提交后无后续跟进处理',
+            { level: 'warning', tag: '关注', hasNew: true, title: '问题解决 - 缺乏后续跟进', detail: '<span class="detail-new">后自由轮和能耗问题提交后无后续跟进处理</span>',
               feedbacks: [{ customer: 'Check', isNew: true, enOriginal: 'No follow up on rear freewheel issues, no follow up on energy consumption issues' }] },
             { level: 'info', tag: '建议', hasNew: false, title: '包装体验 - 包装材料过多', detail: '包装材料量大、占用仓库空间，需要多条分拣线处理，回收成本高',
               feedbacks: [{ customer: 'Dott', isNew: false, enOriginal: 'Too much packaging material / Packaging requires multiple sorting lines for disposal, which take up a lot of space. Also, the volume of packaging material generated is very high, taking space in the warehouse, and requiring more cost and effort to recycle/dispose.' }] }

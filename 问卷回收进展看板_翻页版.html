@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商用出行 2026H1 问卷回收进展看板（翻页版）</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif;
+            background-color: #87ceeb;
+            background-image:
+                linear-gradient(135deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.62) 100%),
+                url('像素_路边.png');
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            padding: 20px 16px;
+            color: #1a1a2e;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(34,197,94,0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 20%, rgba(59,130,246,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        /* 翻页导航 */
+        .page-nav {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 10px 0;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(15px);
+            border-radius: 14px;
+        }
+
+        .page-nav-btn {
+            padding: 8px 22px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #4b5563;
+            background: rgba(255,255,255,0.5);
+        }
+
+        .page-nav-btn:hover { background: rgba(59,130,246,0.1); }
+
+        .page-nav-btn.active {
+            background: #2563eb;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(37,99,235,0.3);
+        }
+
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.4s ease; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 页码指示器 */
+        .page-indicator {
+            text-align: center;
+            margin-top: 16px;
+            color: #6b7280;
+            font-size: 0.8rem;
+        }
+        .page-indicator .current-page { color: #2563eb; font-weight: 700; font-size: 1rem; }
+
+        /* 通用样式 */
+        .section-title {
+            font-size: 1.2rem;
+            color: #1a1a2e;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.88) 50%, rgba(255,255,255,0.9) 100%);
+            backdrop-filter: blur(25px) saturate(180%);
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+            margin-bottom: 20px;
+        }
+
+        /* 汇总卡片 */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.85) 50%, rgba(255,255,255,0.88) 100%);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(0,0,0,0.1);
+            box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+            transition: transform 0.4s ease;
+        }
+
+        .summary-card:hover { transform: translateY(-4px); }
+        .summary-card .label { color: #374151; font-size: 0.85rem; margin-bottom: 6px; font-weight: 600; }
+        .summary-card .value { font-size: 2.4rem; font-weight: bold; color: #111827; }
+        .summary-card .subtext { color: #374151; font-size: 0.8rem; margin-top: 4px; }
+        .summary-card.primary .value { color: #1d4ed8; }
+        .summary-card.success .value { color: #047857; }
+        .summary-card.warning .value { color: #b45309; }
+
+        /* 时间进度 */
+        .timeline-container { display: flex; align-items: center; gap: 16px; }
+        .timeline-label { width: 90px; font-weight: 600; color: #1f2937; font-size: 0.9rem; }
+        .timeline-bars { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .timeline-bar-wrapper { display: flex; align-items: center; gap: 8px; }
+        .timeline-bar-label { font-size: 0.8rem; color: #4b5563; min-width: 60px; }
+        .timeline-bar-container { flex: 1; height: 26px; background: rgba(0,0,0,0.3); border-radius: 13px; overflow: hidden; }
+        .timeline-bar { height: 100%; border-radius: 13px; transition: width 1s ease-out; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; }
+        .timeline-bar.time { background: linear-gradient(90deg, #6366f1, #a78bfa); }
+        .timeline-bar.progress { background: linear-gradient(90deg, #10b981, #34d399); }
+        .timeline-bar-text { color: #1f2937; font-size: 0.75rem; font-weight: 700; }
+
+        .timeline-status { text-align: center; padding: 14px; border-radius: 10px; margin-top: 12px; }
+        .timeline-status.danger { background: rgba(220,38,38,0.2); border: 1px solid rgba(220,38,38,0.5); }
+        .timeline-status.warning { background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.5); }
+        .timeline-status.success { background: rgba(16,185,129,0.2); border: 1px solid rgba(16,185,129,0.5); }
+        .timeline-status-icon { font-size: 2rem; margin-bottom: 4px; }
+        .timeline-status-text { font-weight: 600; color: #1f2937; font-size: 1.1rem; }
+        .timeline-status-subtext { color: #4b5563; font-size: 0.8rem; margin-top: 4px; }
+
+        .timeline-dates { display: flex; justify-content: space-between; margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(100,200,255,0.2); }
+        .timeline-date { text-align: center; font-size: 0.8rem; color: #6b7280; }
+        .timeline-date strong { display: block; color: #1f2937; font-size: 0.95rem; }
+
+        /* 进度条 */
+        .progress-item { margin-bottom: 20px; }
+        .progress-item:last-child { margin-bottom: 0; }
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .team-name { font-weight: 600; color: #1f2937; font-size: 1rem; }
+        .progress-stats { display: flex; gap: 16px; font-size: 0.85rem; }
+        .stat { display: flex; align-items: center; gap: 4px; }
+        .stat-current { color: #2563eb; font-weight: 600; }
+        .stat-target { color: #4b5563; }
+        .progress-bar-container { height: 24px; background: rgba(0,0,0,0.3); border-radius: 12px; overflow: hidden; }
+        .progress-bar { height: 100%; border-radius: 12px; transition: width 1s ease-out; position: relative; }
+        .progress-bar-label { position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-size: 0.8rem; font-weight: 700; color: #1f2937; white-space: nowrap; }
+        .progress-bar.low { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .progress-bar.medium { background: linear-gradient(90deg, #10b981, #34d399); }
+        .progress-bar.high { background: linear-gradient(90deg, #60a5fa, #818cf8); }
+        .progress-bar.full { background: linear-gradient(90deg, #34d399, #059669); }
+
+        .weekly-new-badge { display: inline-flex; align-items: center; gap: 3px; padding: 1px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700; background: #dcfce7; color: #166534; margin-left: 6px; }
+        .weekly-new-badge::before { content: '▲'; font-size: 0.6rem; }
+        .issue-new-tag { display: inline-block; padding: 1px 5px; border-radius: 4px; font-size: 0.65rem; font-weight: 700; background: #dbeafe; color: #1d4ed8; margin-left: 4px; }
+        .issue-btn-active { background: #2563eb !important; color: #fff !important; border-color: #2563eb !important; }
+
+        .rank-badge { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 6px; font-weight: bold; margin-right: 10px; font-size: 0.75rem; color: #fff; }
+        .rank-badge.gold { background: #f59e0b; }
+        .rank-badge.silver { background: #6b7280; }
+        .rank-badge.bronze { background: #b8865b; }
+        .rank-badge.normal { background: rgba(59,130,246,0.2); color: #1f2937; }
+        .team-row { display: flex; align-items: center; }
+
+        /* 满意度 */
+        .satisfaction-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+        .satisfaction-card { background: rgba(255,255,255,0.6); border-radius: 14px; padding: 14px; border: 1px solid rgba(0,0,0,0.08); text-align: center; transition: transform 0.3s ease; }
+        .satisfaction-card:hover { transform: translateY(-3px); }
+        .satisfaction-card-title { font-weight: 600; color: #1f2937; font-size: 0.8rem; margin-bottom: 8px; line-height: 1.4; }
+        .satisfaction-score { font-size: 1.6rem; font-weight: 800; margin-bottom: 2px; }
+        .satisfaction-score-bar { height: 6px; background: #e5e7eb; border-radius: 3px; margin-top: 4px; overflow: hidden; }
+        .satisfaction-score-fill { height: 100%; border-radius: 3px; transition: width 1s ease-out; }
+        .satisfaction-meta { font-size: 0.7rem; color: #9ca3af; margin-top: 2px; }
+
+        /* 问题列表 */
+        .issue-item { background: rgba(255,255,255,0.6); border-radius: 10px; padding: 12px; margin-bottom: 10px; border-left: 3px solid; cursor: pointer; transition: all 0.2s ease; }
+        .issue-item:hover { background: rgba(255,255,255,0.8); }
+        .issue-item.critical { border-left-color: #dc2626; }
+        .issue-item.warning { border-left-color: #f59e0b; }
+        .issue-item.info { border-left-color: #3b82f6; }
+        .issue-tag { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; margin-right: 6px; }
+        .issue-tag.critical { background: #fef2f2; color: #dc2626; }
+        .issue-tag.warning { background: #fffbeb; color: #d97706; }
+        .issue-tag.info { background: #eff6ff; color: #2563eb; }
+        .issue-title { font-weight: 600; color: #1f2937; font-size: 0.9rem; }
+        .issue-detail { color: #6b7280; font-size: 0.8rem; line-height: 1.4; margin-top: 2px; }
+        .issue-source { color: #9ca3af; font-size: 0.75rem; margin-top: 4px; }
+        .issue-expand-icon { float: right; color: #9ca3af; font-size: 0.8rem; transition: transform 0.2s; }
+        .issue-expand-hint { float: right; color: #9ca3af; font-size: 0.65rem; margin-top: 2px; }
+        .issue-item.expanded .issue-expand-icon { transform: rotate(90deg); }
+        .issue-en-section { display: none; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(0,0,0,0.1); }
+        .issue-item.expanded .issue-en-section { display: block; }
+        .issue-en-text { color: #4b5563; font-size: 0.75rem; line-height: 1.4; padding: 6px 10px; border-radius: 6px; margin-top: 4px; font-family: 'Segoe UI', 'Consolas', monospace; }
+        .issue-en-text.new-en { background: #dbeafe; color: #1d4ed8; }
+
+        .footer-note { margin-top: 14px; text-align: center; }
+        .footer-note p { color: #4b5563; font-size: 0.8rem; }
+
+        .header { text-align: center; margin-bottom: 16px; }
+        .header h1 { font-size: 1.6rem; color: #1f2937; letter-spacing: 1px; }
+        .header p { font-size: 0.85rem; color: #4b5563; }
+
+        /* 翻页按钮 */
+        .page-flip {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .flip-btn {
+            padding: 10px 28px;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #2563eb;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(37,99,235,0.3);
+        }
+
+        .flip-btn:hover { background: #1d4ed8; transform: translateY(-2px); }
+        .flip-btn:disabled { background: #e5e7eb; color: #9ca3af; box-shadow: none; cursor: not-allowed; }
+
+        @media (max-width: 768px) {
+            .summary-cards { grid-template-columns: 1fr; }
+            .satisfaction-grid { grid-template-columns: repeat(2, 1fr); }
+            .header h1 { font-size: 1.3rem; }
+            body { padding: 12px 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 商用出行 2026H1 问卷回收进展看板</h1>
+            <p>每周更新各业务组问卷回收进度 —— 2026/5/7</p>
+        </div>
+
+        <div class="page-nav">
+            <button class="page-nav-btn active" onclick="switchPage(0)">总览 & 预警</button>
+            <button class="page-nav-btn" onclick="switchPage(1)">进度 & 分析</button>
+        </div>
+
+        <!-- 第1页：总览 + 时间预警 -->
+        <div class="page active" id="page0">
+            <div class="glass-card">
+                <h2 class="section-title">📋 回收总览</h2>
+                <div class="summary-cards">
+                    <div class="summary-card primary">
+                        <div class="label">总回收数量</div>
+                        <div class="value" id="totalCollected">0</div>
+                        <div class="subtext">当前已回收问卷数</div>
+                    </div>
+                    <div class="summary-card success">
+                        <div class="label">H1 总目标</div>
+                        <div class="value" id="totalTarget">0</div>
+                        <div class="subtext">2026 年上半年目标</div>
+                    </div>
+                    <div class="summary-card warning">
+                        <div class="label">整体完成率</div>
+                        <div class="value" id="completionRate">0%</div>
+                        <div class="subtext">距离目标还有<span id="remaining">0</span>份</div>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card">
+                <h2 class="section-title">⏰ 调研时间进度预警</h2>
+                <div class="timeline-container">
+                    <div class="timeline-label">时间进度</div>
+                    <div class="timeline-bars">
+                        <div class="timeline-bar-wrapper">
+                            <span class="timeline-bar-label">时间流逝</span>
+                            <div class="timeline-bar-container">
+                                <div class="timeline-bar time" id="timeProgress" style="width: 0%;">
+                                    <span class="timeline-bar-text" id="timeProgressText">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-bar-wrapper">
+                            <span class="timeline-bar-label">任务完成</span>
+                            <div class="timeline-bar-container">
+                                <div class="timeline-bar progress" id="taskProgress" style="width: 0%;">
+                                    <span class="timeline-bar-text" id="taskProgressText">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-status" id="timelineStatus">
+                    <div class="timeline-status-icon" id="statusIcon"></div>
+                    <div class="timeline-status-text" id="statusText"></div>
+                    <div class="timeline-status-subtext" id="statusSubtext"></div>
+                </div>
+                <div class="timeline-dates">
+                    <div class="timeline-date"><strong>4 月 15 日</strong>调研开始</div>
+                    <div class="timeline-date"><strong>5 月 7 日</strong>当前日期</div>
+                    <div class="timeline-date"><strong>5 月 31 日</strong>调研截止</div>
+                </div>
+            </div>
+            <div class="page-flip">
+                <button class="flip-btn" disabled>上一页</button>
+                <button class="flip-btn" onclick="switchPage(1)">下一页 →</button>
+            </div>
+            <div class="page-indicator"><span class="current-page">1</span> / 2</div>
+        </div>
+
+        <!-- 第2页：回收进度 + 问卷分析 -->
+        <div class="page" id="page1">
+            <div class="glass-card">
+                <h2 class="section-title">📈 各业务组回收进度</h2>
+                <div id="progressList"></div>
+            </div>
+            <div class="glass-card">
+                <h2 class="section-title">🔍 问卷初步分析（7份已回收）</h2>
+                <div class="satisfaction-grid" id="satGrid"></div>
+            </div>
+            <div class="glass-card">
+                <div class="issue-list">
+                    <h3 style="color:#1f2937;font-weight:600;margin-bottom:12px;font-size:1rem;display:flex;align-items:center;gap:8px;">⚠️ 重点问题汇总
+                    <button id="issueFilterBtn" onclick="toggleIssueFilter()" style="padding:3px 10px;border-radius:6px;font-size:0.7rem;font-weight:600;border:1px solid #d1d5db;background:#fff;color:#4b5563;cursor:pointer;transition:all 0.2s;">切换为本周新增</button>
+                </h3>
+                <div id="issueList"></div>
+                </div>
+            </div>
+            <div class="footer-note">
+                <p>📝 备注：以上回收目标为预估值，最终目标将依据客户分级制度正式确定后进行调整。</p>
+            </div>
+            <div class="page-flip">
+                <button class="flip-btn" onclick="switchPage(0)">← 上一页</button>
+                <button class="flip-btn" disabled>下一页</button>
+            </div>
+            <div class="page-indicator"><span class="current-page">2</span> / 2</div>
+        </div>
+    </div>
+
+    <script>
+        // 翻页逻辑
+        let currentPage = 0;
+        const totalPages = 2;
+
+        function switchPage(idx) {
+            currentPage = idx;
+            document.querySelectorAll('.page').forEach((p, i) => {
+                p.classList.toggle('active', i === idx);
+            });
+            document.querySelectorAll('.page-nav-btn').forEach((b, i) => {
+                b.classList.toggle('active', i === idx);
+            });
+        }
+
+        // 键盘翻页
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                if (currentPage < totalPages - 1) switchPage(currentPage + 1);
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                if (currentPage > 0) switchPage(currentPage - 1);
+            }
+        });
+
+        // 数据
+        const data = [
+            { team: '欧美一组', collected: 0, h1Target: 10, weeklyGain: 0 },
+            { team: '欧美二组', collected: 3, h1Target: 15, weeklyGain: 0 },
+            { team: '亚太一组', collected: 3, h1Target: 15, weeklyGain: 1 },
+            { team: '亚太二组', collected: 0, h1Target: 15, weeklyGain: 0 },
+            { team: '欧美三组', collected: 1, h1Target: 15, weeklyGain: 1 }
+        ];
+
+        const surveyStartDate = new Date('2026-04-15');
+        const surveyEndDate = new Date('2026-05-31');
+        const currentDate = new Date('2026-05-07');
+
+        const totalDays = (surveyEndDate - surveyStartDate) / (1000 * 60 * 60 * 24);
+        const elapsedDays = (currentDate - surveyStartDate) / (1000 * 60 * 60 * 24);
+        const timeProgress = ((elapsedDays / totalDays) * 100).toFixed(1);
+
+        const totalCollected = data.reduce((sum, item) => sum + item.collected, 0);
+        const totalTarget = data.reduce((sum, item) => sum + item.h1Target, 0);
+        const completionRate = ((totalCollected / totalTarget) * 100).toFixed(1);
+        const remaining = totalTarget - totalCollected;
+
+        document.getElementById('totalCollected').textContent = totalCollected;
+        document.getElementById('totalTarget').textContent = totalTarget;
+        document.getElementById('completionRate').textContent = completionRate + '%';
+        document.getElementById('remaining').textContent = remaining;
+
+        document.getElementById('timeProgress').style.width = timeProgress + '%';
+        document.getElementById('timeProgressText').textContent = timeProgress + '%';
+        document.getElementById('taskProgress').style.width = completionRate + '%';
+        document.getElementById('taskProgressText').textContent = completionRate + '%';
+
+        const rateNum = parseFloat(completionRate);
+        const timeNum = parseFloat(timeProgress);
+        const statusEl = document.getElementById('timelineStatus');
+        const statusIcon = document.getElementById('statusIcon');
+        const statusText = document.getElementById('statusText');
+        const statusSubtext = document.getElementById('statusSubtext');
+
+        if (rateNum >= timeNum * 0.8) {
+            statusEl.className = 'timeline-status success';
+            statusIcon.textContent = '✅';
+            statusText.textContent = '进度正常';
+            statusSubtext.textContent = `任务完成度 (${completionRate}%) 与时间进度 (${timeProgress}%) 匹配`;
+        } else if (rateNum >= timeNum * 0.3) {
+            statusEl.className = 'timeline-status warning';
+            statusIcon.textContent = '⚠️';
+            statusText.textContent = '进度偏慢';
+            statusSubtext.textContent = `任务完成度 (${completionRate}%) 低于时间进度 (${timeProgress}%)，建议加快节奏`;
+        } else {
+            statusEl.className = 'timeline-status danger';
+            statusIcon.textContent = '🚨';
+            statusText.textContent = '进度严重滞后';
+            statusSubtext.textContent = `时间已过 ${timeProgress}%，但任务仅完成 ${completionRate}%，需立即加大力度`;
+        }
+
+        const sortedData = [...data].sort((a, b) => (b.collected / b.h1Target) - (a.collected / a.h1Target));
+
+        function getProgressClass(rate) {
+            if (rate >= 100) return 'full';
+            if (rate >= 50) return 'high';
+            if (rate >= 20) return 'medium';
+            return 'low';
+        }
+
+        function getRankBadge(rank) {
+            if (rank === 1) return '<div class="rank-badge gold">1</div>';
+            if (rank === 2) return '<div class="rank-badge silver">2</div>';
+            if (rank === 3) return '<div class="rank-badge bronze">3</div>';
+            return '<div class="rank-badge normal">' + rank + '</div>';
+        }
+
+        let progressHTML = '';
+        sortedData.forEach((item, index) => {
+            const rate = ((item.collected / item.h1Target) * 100).toFixed(1);
+            const rateNum = parseFloat(rate);
+            const progressClass = getProgressClass(rateNum);
+            progressHTML += `
+                <div class="progress-item${item.weeklyGain > 0 ? ' weekly-gain' : ''}">
+                    <div class="progress-header">
+                        <div class="team-row">
+                            ${getRankBadge(index + 1)}
+                            <span class="team-name">${item.team}</span>
+                            ${item.weeklyGain > 0 ? `<span class="weekly-new-badge">+${item.weeklyGain}</span>` : ''}
+                        </div>
+                        <div class="progress-stats">
+                            <span class="stat stat-current">✓ ${item.collected}</span>
+                            <span class="stat stat-target">/ ${item.h1Target}</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar ${progressClass}" style="width: ${rateNum}%;">
+                            <span class="progress-bar-label">${rate}%</span>
+                        </div>
+                    </div>
+                </div>`;
+        });
+        document.getElementById('progressList').innerHTML = progressHTML;
+
+        // 满意度分析
+        const surveys = [
+            { packaging: 5, unboxing: 5, quality: 5, functions: 5, performance: 5, riding: 5, om: 5, firmware: 5, docs: 5, issue: 5, spare: 4 },
+            { packaging: 3, unboxing: 4, quality: 2, functions: 4, performance: 4, riding: 4, om: 3, firmware: null, docs: 1, issue: 4, spare: null },
+            { packaging: 3, unboxing: 4, quality: 3, functions: 4, performance: 3, riding: 4, om: 4, firmware: 4, docs: 3, issue: 4, spare: null },
+            { packaging: 3, unboxing: 4, quality: 4, functions: 5, performance: 4, riding: 4, om: 3, firmware: 4, docs: 4, issue: 4, spare: 3 },
+            { packaging: 5, unboxing: 4, quality: 5, functions: 5, performance: 5, riding: 4, om: 4, firmware: 4, docs: 4, issue: 5, spare: 3 },
+            { packaging: null, unboxing: null, quality: 3, functions: 3, performance: 2, riding: 3, om: 4, firmware: 3, docs: 3, issue: 3, spare: null },
+            { packaging: 4, unboxing: 4, quality: 4, functions: 5, performance: 4, riding: 5, om: null, firmware: null, docs: 4, issue: 4, spare: 4 }
+        ];
+
+        const dimLabels = [
+            { key: 'packaging', name: '包装体验', en: 'Packaging' },
+            { key: 'unboxing', name: '开箱体验', en: 'Unboxing' },
+            { key: 'quality', name: '产品质量', en: 'Quality' },
+            { key: 'functions', name: '产品功能', en: 'Functions' },
+            { key: 'performance', name: '产品性能', en: 'Performance' },
+            { key: 'riding', name: '骑行体验', en: 'Riding' },
+            { key: 'om', name: '运维体验', en: 'O&M' },
+            { key: 'firmware', name: '固件定制', en: 'Firmware' },
+            { key: 'docs', name: '技术文档', en: 'Docs' },
+            { key: 'issue', name: '问题解决', en: 'Issue Res.' },
+            { key: 'spare', name: '备件服务', en: 'Spare Parts' }
+        ];
+
+        function getScoreColor(avg) {
+            if (avg >= 4.5) return '#059669';
+            if (avg >= 3.5) return '#2563eb';
+            if (avg >= 2.5) return '#d97706';
+            if (avg >= 1.5) return '#dc2626';
+            return '#991b1b';
+        }
+
+        let satHTML = '';
+        dimLabels.forEach(d => {
+            const scores = surveys.map(s => s[d.key]).filter(v => v !== null);
+            const avg = scores.length > 0 ? (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1) : 'N/A';
+            const avgNum = avg === 'N/A' ? 0 : parseFloat(avg);
+            const pct = avg === 'N/A' ? 0 : (avgNum / 5) * 100;
+            const color = getScoreColor(avgNum);
+            satHTML += `<div class="satisfaction-card">
+                <div class="satisfaction-card-title">${d.name}<br><span style="color:#9ca3af;font-size:0.7rem">${d.en}</span></div>
+                <div class="satisfaction-score" style="color:${avg === 'N/A' ? '#9ca3af' : color}">${avg}</div>
+                <div class="satisfaction-meta">${avg === 'N/A' ? '无有效评分' : `${scores.length} 份有效 / 5分满分`}</div>
+                <div class="satisfaction-score-bar"><div class="satisfaction-score-fill" style="width:${pct}%;background:${avg === 'N/A' ? '#e5e7eb' : color}"></div></div>
+            </div>`;
+        });
+        document.getElementById('satGrid').innerHTML = satHTML;
+
+        // 问题汇总（按客户分段，各自标记是否新增，英文原文使用问卷原文）
+        const issues = [
+            { level: 'critical', tag: '严重', hasNew: false, title: '产品质量 - 前叉问题', detail: '前叉未正确紧固，导致重大生产失误，严重影响客户上线计划',
+              feedbacks: [{ customer: 'Dott', isNew: false, enOriginal: 'Front fork issue is a big production error by NineBot. This should not have happened. It significantly impact our launch.' }] },
+            { level: 'critical', tag: '严重', hasNew: true, title: '技术文档 - 交付不及时且实用性不足', detail: 'SOP、技术支持和工具等文档未按时交付；无标准化文档模板；需增加扭矩规格等概览信息',
+              feedbacks: [
+                { customer: 'Dott', isNew: false, enOriginal: 'SOPs, technical support, tools, etc... were all asked ahead of time and ninebot did not deliver on this. / It does not appear that Ninebot has a standard template for documentation - we have to request certain information or details every time even though it was provided in the past with older models (the expectation generally is if we received it in the past, we should be getting it again automatically?) Also documentation should be provided well enough in advance to allow for internal review and training of our teams.' },
+                { customer: 'Check', isNew: true, enOriginal: 'Would like to see one overview of torque specs' }
+              ] },
+            { level: 'warning', tag: '关注', hasNew: true, title: '产品性能 - 续航虚标与能耗过高', detail: '新车型短骑行率高于旧车型；B200电池连接器腐蚀；实际能耗远高于宣传值；最高速行驶不平稳',
+              feedbacks: [
+                { customer: 'Dott', isNew: false, enOriginal: 'Our initial drainage rates on the new products are higher than the older models. This should be fixed by low power mode, but to be confirmed. Also, our new vehicles are experiencing higher number of short rides vs our older models, which should be the other way around. on B200 bikes water is already causing corrosion on our battery connectors' },
+                { customer: 'Check', isNew: true, enOriginal: 'Driving at top speed has too much cadence and is not smooth. Energy consumption is way higher than advertised' }
+              ] },
+            { level: 'warning', tag: '关注', hasNew: true, title: '产品质量 - 故障率与耐久性', detail: 'Apex电池锁/盖易被打开；后自由轮过早损坏；结构件异常响声、松动；电池充电时漏水；充电器裸露插脚设计不安全',
+              feedbacks: [
+                { customer: 'Dott', isNew: false, enOriginal: 'Apex - Batteries are being stolen because the lock/lid is easy to open, the Front forks were not correctly tightened during production, which caused a significant impact, B200 have freewheel issues, including other durability issues.' },
+                { customer: 'Check', isNew: true, enOriginal: 'Rear freewheel is breaking too soon & battery has water dripping out when charging horizontally, also the charger design is not safe with the exposed pins forcing us to create custom shelving.' }
+              ] },
+            { level: 'warning', tag: '关注', hasNew: false, title: '运维体验 - 维护效率低', detail: '前叉和线缆拆装流程效率不足；ECU舱线缆管理不理想；日常维护效率、故障排查和备件更换均有提升空间',
+              feedbacks: [{ customer: 'Dott', isNew: false, enOriginal: 'The vehicles are still hard to correctly maintain in our operations / Disassembly procedures for front fork and cabling are inefficient and could be developed further. Also ECU compartment cable management is dissatisfactory' }] },
+            { level: 'warning', tag: '关注', hasNew: true, title: '备件服务 - 交付周期长且流程复杂', detail: '备件和工具交付周期较长，应确保备件与车辆同步到达市场；订购流程复杂、响应速度慢；出货存在价格、数量和文档错误',
+              feedbacks: [
+                { customer: 'Dott', isNew: false, enOriginal: 'It is taking a long time to receive the parts and tools - of course the issue is not entirely at Ninebot end, our team was being slow with the PO as well. But lets try to make sure we start planning getting the spare parts to markets at the same time when the vehicles arrive.' },
+                { customer: 'Jet', isNew: true, enOriginal: '1. Complexity and speed of spare parts ordering 2. Response speed 3. Loyalty and problem-solving approach 4. Errors in shipments, ranging from pricing and quantities to documentation mistakes' }
+              ] },
+            { level: 'warning', tag: '关注', hasNew: true, title: '固件定制 - 更新推送不主动', detail: '新固件不主动推送，客户需自行询问；加速和助力模式的定制化选项不足',
+              feedbacks: [{ customer: 'Check', isNew: true, enOriginal: 'New firmware is not pushed proactively, we have to ask for updates / We would like to have more customisation options in terms of acceleration and assistance modes' }] },
+            { level: 'warning', tag: '关注', hasNew: true, title: '问题解决 - 缺乏后续跟进', detail: '后自由轮和能耗问题提交后无后续跟进处理',
+              feedbacks: [{ customer: 'Check', isNew: true, enOriginal: 'No follow up on rear freewheel issues, no follow up on energy consumption issues' }] },
+            { level: 'info', tag: '建议', hasNew: false, title: '包装体验 - 包装材料过多', detail: '包装材料量大、占用仓库空间，需要多条分拣线处理，回收成本高',
+              feedbacks: [{ customer: 'Dott', isNew: false, enOriginal: 'Too much packaging material / Packaging requires multiple sorting lines for disposal, which take up a lot of space. Also, the volume of packaging material generated is very high, taking space in the warehouse, and requiring more cost and effort to recycle/dispose.' }] }
+        ];
+
+        let showNewOnly = false;
+
+        function toggleIssueFilter() {
+            showNewOnly = !showNewOnly;
+            const btn = document.getElementById('issueFilterBtn');
+            btn.textContent = showNewOnly ? '切换为所有' : '切换为本周新增';
+            btn.classList.toggle('issue-btn-active', showNewOnly);
+            renderIssues();
+        }
+
+        function renderIssues() {
+            const filtered = showNewOnly ? issues.filter(i => i.hasNew) : issues;
+            let html = '';
+            filtered.forEach(i => {
+                // 客户名列表：新增客户用蓝色标注
+                const customerDisplay = i.feedbacks.map(f =>
+                    f.isNew ? `<span style="background:#dbeafe;color:#1d4ed8;padding:1px 5px;border-radius:3px;font-size:0.7rem;font-weight:600;">${f.customer}</span>` : f.customer
+                ).join(' · ');
+                // 按客户分段英文原文
+                const enSection = i.feedbacks.map(f =>
+                    `<div class="issue-en-text ${f.isNew ? 'new-en' : ''}">${f.customer}：${f.enOriginal}</div>`
+                ).join('');
+
+                html += `<div class="issue-item ${i.level}" onclick="toggleIssue(this)">
+                <span class="issue-expand-icon">▶</span>
+                <span class="issue-tag ${i.level}">${i.tag}</span>${i.hasNew ? '<span class="issue-new-tag">新增</span>' : ''}
+                <div class="issue-title">${i.title}</div>
+                <div class="issue-detail">${i.detail}</div>
+                <div class="issue-source">客户：${customerDisplay}</div>
+                <div class="issue-en-section">
+                    ${enSection}
+                </div>
+            </div>`;
+            });
+            document.getElementById('issueList').innerHTML = html;
+        }
+
+        function toggleIssue(el) {
+            el.classList.toggle('expanded');
+        }
+
+        renderIssues();
+    </script>
+</body>
+</html>

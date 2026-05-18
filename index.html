@@ -264,7 +264,7 @@
     <div class="container">
         <div class="header">
             <h1>📊 商用出行 2026H1 问卷回收进展看板</h1>
-            <p>每周更新各业务组问卷回收进度 —— 2026/5/8</p>
+            <p>每周更新各业务组问卷回收进度 —— 2026/5/18</p>
         </div>
 
         <div class="page-nav">
@@ -324,7 +324,7 @@
                 </div>
                 <div class="timeline-dates">
                     <div class="timeline-date"><strong>4 月 15 日</strong>调研开始</div>
-                    <div class="timeline-date"><strong>5 月 8 日</strong>当前日期</div>
+                    <div class="timeline-date"><strong>5 月 18 日</strong>当前日期</div>
                     <div class="timeline-date"><strong>5 月 31 日</strong>调研截止</div>
                 </div>
             </div>
@@ -342,7 +342,7 @@
                 <div id="progressList"></div>
             </div>
             <div class="glass-card">
-                <h2 class="section-title">🔍 问卷初步分析（7份已回收）</h2>
+                <h2 class="section-title">🔍 问卷初步分析（10份已回收）</h2>
                 <div class="satisfaction-grid" id="satGrid"></div>
             </div>
             <div class="glass-card">
@@ -397,15 +397,15 @@
         // 数据
         const data = [
             { team: '欧美一组', collected: 0, h1Target: 10, weeklyGain: 0 },
-            { team: '欧美二组', collected: 3, h1Target: 15, weeklyGain: 0 },
-            { team: '亚太一组', collected: 3, h1Target: 15, weeklyGain: 2 },
+            { team: '欧美二组', collected: 4, h1Target: 15, weeklyGain: 1 },
+            { team: '亚太一组', collected: 3, h1Target: 15, weeklyGain: 0 },
             { team: '亚太二组', collected: 0, h1Target: 15, weeklyGain: 0 },
-            { team: '欧美三组', collected: 1, h1Target: 15, weeklyGain: 1 }
+            { team: '欧美三组', collected: 3, h1Target: 15, weeklyGain: 2 }
         ];
 
         const surveyStartDate = new Date('2026-04-15');
         const surveyEndDate = new Date('2026-05-31');
-        const currentDate = new Date('2026-05-08');
+        const currentDate = new Date('2026-05-18');
 
         const totalDays = (surveyEndDate - surveyStartDate) / (1000 * 60 * 60 * 24);
         const elapsedDays = (currentDate - surveyStartDate) / (1000 * 60 * 60 * 24);
@@ -501,7 +501,10 @@
             { packaging: 3, unboxing: 4, quality: 4, functions: 5, performance: 4, riding: 4, om: 3, firmware: 4, docs: 4, issue: 4, spare: 3 },
             { packaging: 5, unboxing: 4, quality: 5, functions: 5, performance: 5, riding: 4, om: 4, firmware: 4, docs: 4, issue: 5, spare: 3 },
             { packaging: null, unboxing: null, quality: 3, functions: 3, performance: 2, riding: 3, om: 4, firmware: 3, docs: 3, issue: 3, spare: null },
-            { packaging: 4, unboxing: 4, quality: 4, functions: 5, performance: 4, riding: 5, om: null, firmware: null, docs: 4, issue: 4, spare: 4 }
+            { packaging: 4, unboxing: 4, quality: 4, functions: 5, performance: 4, riding: 5, om: null, firmware: null, docs: 4, issue: 4, spare: 4 },
+            { packaging: 5, unboxing: 5, quality: 5, functions: 5, performance: 5, riding: 5, om: 4, firmware: 5, docs: 4, issue: 4, spare: 4 },
+            { packaging: 5, unboxing: 5, quality: 2, functions: 3, performance: 3, riding: 4, om: 3, firmware: 4, docs: 3, issue: 1, spare: 4 },
+            { packaging: 2, unboxing: 5, quality: 4, functions: 4, performance: 5, riding: 5, om: 5, firmware: 5, docs: 5, issue: null, spare: 4 }
         ];
 
         const dimLabels = [
@@ -551,42 +554,53 @@
         const issues = [
             { level: 'critical', tag: '严重', hasNew: false, title: '产品质量 - 前叉问题', detail: '前叉未正确紧固，导致重大生产失误，严重影响客户上线计划',
               feedbacks: [{ customer: 'Dott', isNew: false, enOriginal: 'Front fork issue is a big production error by NineBot. This should not have happened. It significantly impact our launch.' }] },
-            { level: 'critical', tag: '严重', hasNew: true, title: '技术文档 - 交付不及时且实用性不足', detail: 'SOP、技术支持和工具等文档未按时交付；无标准化文档模板；<span class="detail-new">需增加扭矩规格等概览信息</span>',
+            { level: 'critical', tag: '严重', hasNew: false, title: '技术文档 - 交付不及时且实用性不足', detail: 'SOP、技术支持和工具等文档未按时交付；无标准化文档模板；需增加扭矩规格等概览信息',
               feedbacks: [
                 { customer: 'Dott', isNew: false, enOriginal: 'SOPs, technical support, tools, etc... were all asked ahead of time and ninebot did not deliver on this. / It does not appear that Ninebot has a standard template for documentation - we have to request certain information or details every time even though it was provided in the past with older models (the expectation generally is if we received it in the past, we should be getting it again automatically?) Also documentation should be provided well enough in advance to allow for internal review and training of our teams.' },
-                { customer: 'Check', isNew: true, enOriginal: 'Would like to see one overview of torque specs' }
+                { customer: 'Check', isNew: false, enOriginal: 'Would like to see one overview of torque specs' }
               ] },
-            { level: 'warning', tag: '关注', hasNew: true, title: '产品性能 - 续航虚标与能耗过高', detail: '新车型短骑行率高于旧车型；B200电池连接器腐蚀；<span class="detail-new">实际能耗远高于宣传值；最高速行驶不平稳</span>',
+            { level: 'warning', tag: '关注', hasNew: true, title: '产品性能 - 续航虚标与能耗过高', detail: '新车型短骑行率高于旧车型；B200电池连接器腐蚀；实际能耗远高于宣传值；最高速行驶不平稳；<span class="detail-new">转向过于灵敏，防水性能不足</span>',
               feedbacks: [
                 { customer: 'Dott', isNew: false, enOriginal: 'Our initial drainage rates on the new products are higher than the older models. This should be fixed by low power mode, but to be confirmed. Also, our new vehicles are experiencing higher number of short rides vs our older models, which should be the other way around. on B200 bikes water is already causing corrosion on our battery connectors' },
-                { customer: 'Check', isNew: true, enOriginal: 'Driving at top speed has too much cadence and is not smooth. Energy consumption is way higher than advertised' }
+                { customer: 'Check', isNew: false, enOriginal: 'Driving at top speed has too much cadence and is not smooth. Energy consumption is way higher than advertised' },
+                { customer: 'Cooltra', isNew: true, enOriginal: 'Steering wheel is a bit sensitive, and the bike is made to be left on the street, so it should be more water resistant' }
               ] },
-            { level: 'warning', tag: '关注', hasNew: true, title: '产品质量 - 故障率与耐久性', detail: 'Apex电池锁/盖易被打开；后自由轮过早损坏；结构件异常响声、松动；<span class="detail-new">电池充电时漏水；充电器裸露插脚设计不安全</span>',
+            { level: 'warning', tag: '关注', hasNew: true, title: '产品质量 - 故障率与耐久性', detail: 'Apex电池锁/盖易被打开；后自由轮过早损坏；结构件异常响声、松动；电池充电时漏水；充电器裸露插脚设计不安全；<span class="detail-new">初始材料质量不足，更换件质量有所改善</span>',
               feedbacks: [
                 { customer: 'Dott', isNew: false, enOriginal: 'Apex - Batteries are being stolen because the lock/lid is easy to open, the Front forks were not correctly tightened during production, which caused a significant impact, B200 have freewheel issues, including other durability issues.' },
-                { customer: 'Check', isNew: true, enOriginal: 'Rear freewheel is breaking too soon & battery has water dripping out when charging horizontally, also the charger design is not safe with the exposed pins forcing us to create custom shelving.' }
+                { customer: 'Check', isNew: false, enOriginal: 'Rear freewheel is breaking too soon & battery has water dripping out when charging horizontally, also the charger design is not safe with the exposed pins forcing us to create custom shelving.' },
+                { customer: 'Cooltra', isNew: true, enOriginal: 'The initial materials lack a bit of quality, but when receiving replacement parts, the quality has improved' }
               ] },
-            { level: 'warning', tag: '关注', hasNew: false, title: '运维体验 - 维护效率低', detail: '前叉和线缆拆装流程效率不足；ECU舱线缆管理不理想；日常维护效率、故障排查和备件更换均有提升空间',
-              feedbacks: [{ customer: 'Dott', isNew: false, enOriginal: 'The vehicles are still hard to correctly maintain in our operations / Disassembly procedures for front fork and cabling are inefficient and could be developed further. Also ECU compartment cable management is dissatisfactory' }] },
-            { level: 'warning', tag: '关注', hasNew: true, title: '备件服务 - 交付周期长且流程复杂', detail: '备件和工具交付周期较长，应确保备件与车辆同步到达市场；<span class="detail-new">订购流程复杂、响应速度慢；出货存在价格、数量和文档错误</span>',
+            { level: 'warning', tag: '关注', hasNew: true, title: '运维体验 - 维护效率低', detail: '前叉和线缆拆装流程效率不足；ECU舱线缆管理不理想；日常维护效率、故障排查和备件更换均有提升空间；<span class="detail-new">拆装耗时较长，比其他品牌车辆更不方便</span>',
+              feedbacks: [
+                { customer: 'Dott', isNew: false, enOriginal: 'The vehicles are still hard to correctly maintain in our operations / Disassembly procedures for front fork and cabling are inefficient and could be developed further. Also ECU compartment cable management is dissatisfactory' },
+                { customer: 'Cooltra', isNew: true, enOriginal: 'The dissasembling of the bike is a bit impractical. It takes longer than with other bikes' }
+              ] },
+            { level: 'warning', tag: '关注', hasNew: false, title: '备件服务 - 交付周期长且流程复杂', detail: '备件和工具交付周期较长，应确保备件与车辆同步到达市场；订购流程复杂、响应速度慢；出货存在价格、数量和文档错误',
               feedbacks: [
                 { customer: 'Dott', isNew: false, enOriginal: 'It is taking a long time to receive the parts and tools - of course the issue is not entirely at Ninebot end, our team was being slow with the PO as well. But lets try to make sure we start planning getting the spare parts to markets at the same time when the vehicles arrive.' },
-                { customer: 'Jet', isNew: true, enOriginal: '1. Complexity and speed of spare parts ordering 2. Response speed 3. Loyalty and problem-solving approach 4. Errors in shipments, ranging from pricing and quantities to documentation mistakes' }
+                { customer: 'Jet', isNew: false, enOriginal: '1. Complexity and speed of spare parts ordering 2. Response speed 3. Loyalty and problem-solving approach 4. Errors in shipments, ranging from pricing and quantities to documentation mistakes' }
               ] },
-            { level: 'warning', tag: '关注', hasNew: true, title: '固件定制 - 更新推送不主动', detail: '<span class="detail-new">新固件不主动推送，客户需自行询问；加速和助力模式的定制化选项不足</span>',
-              feedbacks: [{ customer: 'Check', isNew: true, enOriginal: 'New firmware is not pushed proactively, we have to ask for updates / We would like to have more customisation options in terms of acceleration and assistance modes' }] },
-            { level: 'warning', tag: '关注', hasNew: true, title: '问题解决 - 缺乏后续跟进', detail: '<span class="detail-new">后自由轮和能耗问题提交后无后续跟进处理</span>',
-              feedbacks: [{ customer: 'Check', isNew: true, enOriginal: 'No follow up on rear freewheel issues, no follow up on energy consumption issues' }] },
-            { level: 'info', tag: '建议', hasNew: false, title: '包装体验 - 包装材料过多', detail: '包装材料量大、占用仓库空间，需要多条分拣线处理，回收成本高',
-              feedbacks: [{ customer: 'Dott', isNew: false, enOriginal: 'Too much packaging material / Packaging requires multiple sorting lines for disposal, which take up a lot of space. Also, the volume of packaging material generated is very high, taking space in the warehouse, and requiring more cost and effort to recycle/dispose.' }] }
+            { level: 'warning', tag: '关注', hasNew: true, title: '产品功能 - 座椅调节固定问题', detail: '<span class="detail-new">座椅调至最低位置时无法固定，应增加限位器</span>',
+              feedbacks: [{ customer: 'Cooltra', isNew: true, enOriginal: 'If i want to put the seat height at the minimum, the seat does not stay fixed. It should have a stopper.' }] },
+            { level: 'warning', tag: '关注', hasNew: true, title: '问题解决 - 产品出货周期长', detail: '<span class="detail-new">技术服务良好，但产品出货周期较长</span>',
+              feedbacks: [{ customer: 'Cooltra', isNew: true, enOriginal: 'The technical service is good. Product shipment takes a lot sometimes.' }] },
+            { level: 'info', tag: '建议', hasNew: true, title: '包装体验 - 包装材料过多', detail: '包装材料量大、占用仓库空间，需要多条分拣线处理，回收成本高；<span class="detail-new">泡沫塑料难以处置，建议减少泡沫和塑料用量</span>',
+              feedbacks: [
+                { customer: 'Dott', isNew: false, enOriginal: 'Too much packaging material / Packaging requires multiple sorting lines for disposal, which take up a lot of space. Also, the volume of packaging material generated is very high, taking space in the warehouse, and requiring more cost and effort to recycle/dispose.' },
+                { customer: 'Qick', isNew: true, enOriginal: 'The Styrofoam is difficult to dispose of, Would be better with no styrofoam at all and less plastic overall.' }
+              ] }
         ];
 
         // 客户好评汇总
         const positives = [
             { tag: '全优', isNew: false, customer: 'Whoosh', title: '整体满意度优秀', detail: '全维度 Very Satisfied (5分)，零投诉，仅备件服务为 Satisfied (4分)', enOriginal: 'All dimensions rated Very Satisfied (5/5), zero complaints. Spare parts rated Satisfied (4/5).' },
-            { tag: '好评', isNew: true, customer: 'Jet', title: '包装/质量/功能/性能/问题解决均 Very Satisfied', detail: '包装、产品质量、产品功能、产品性能、问题解决均获5分满分', enOriginal: 'Packaging, product quality, product functions, product performance, and issue resolution all rated Very Satisfied (5/5).' },
-            { tag: '好评', isNew: true, customer: 'Urent', title: '产品功能/骑行体验 Very Satisfied', detail: '产品功能、骑行体验均获5分满分，无文字投诉', enOriginal: 'Product functions and riding experience both rated Very Satisfied (5/5). No additional text feedback provided.' },
-            { tag: '认可', isNew: true, customer: 'Check', title: '技术文档 - 维修说明详细', detail: '维修说明解释得很详细，客户表示满意', enOriginal: 'Repairs are explained in a detailed way, we are happy with that.' },
+            { tag: '好评', isNew: true, customer: 'Ryde', title: '包装/开箱/质量/功能/性能/骑行/固件均 Very Satisfied', detail: '7个维度获5分满分，运维/文档/问题解决/备件为4分，无文字投诉', enOriginal: 'Packaging, unboxing, quality, functions, performance, riding, firmware all rated Very Satisfied (5/5). No additional text feedback provided.' },
+            { tag: '好评', isNew: true, customer: 'Qick', title: '开箱/性能/骑行/运维/固件/技术文档均 Very Satisfied', detail: '6个维度获5分满分，仅包装2分', enOriginal: 'Unboxing, performance, riding, O&M, firmware, technical documentation all rated Very Satisfied (5/5). Packaging rated Dissatisfied (2/5).' },
+            { tag: '好评', isNew: false, customer: 'Jet', title: '包装/质量/功能/性能/问题解决均 Very Satisfied', detail: '包装、产品质量、产品功能、产品性能、问题解决均获5分满分', enOriginal: 'Packaging, product quality, product functions, product performance, and issue resolution all rated Very Satisfied (5/5).' },
+            { tag: '好评', isNew: false, customer: 'Urent', title: '产品功能/骑行体验 Very Satisfied', detail: '产品功能、骑行体验均获5分满分，无文字投诉', enOriginal: 'Product functions and riding experience both rated Very Satisfied (5/5). No additional text feedback provided.' },
+            { tag: '认可', isNew: true, customer: 'Cooltra', title: '包装/开箱均 Very Satisfied；技术文档评价良好', detail: '包装、开箱均获5分满分；技术文档评价为相当完善', enOriginal: 'Packaging and unboxing both rated Very Satisfied (5/5). / The documentation is quite good and complete' },
+            { tag: '认可', isNew: false, customer: 'Check', title: '技术文档 - 维修说明详细', detail: '维修说明解释得很详细，客户表示满意', enOriginal: 'Repairs are explained in a detailed way, we are happy with that.' },
             { tag: '认可', isNew: false, customer: 'Dott', title: '备件服务 - 合作意愿积极', detail: 'Veeti表示并非不满意，而是希望两家公司更好地协作改进', enOriginal: 'It is not that I am dissatisfied with the service, I just mean that we should have open discussion on how to make it work better in the future！ It should be collaboration between the companies.' }
         ];
 

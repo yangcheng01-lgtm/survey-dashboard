@@ -264,7 +264,7 @@
     <div class="container">
         <div class="header">
             <h1>📊 商用出行 2026H1 问卷回收进展看板</h1>
-            <p>每周更新各业务组问卷回收进度 —— 2026/5/18</p>
+            <p>每周更新各业务组问卷回收进度 —— 2026/5/20</p>
         </div>
 
         <div class="page-nav">
@@ -324,7 +324,7 @@
                 </div>
                 <div class="timeline-dates">
                     <div class="timeline-date"><strong>4 月 15 日</strong>调研开始</div>
-                    <div class="timeline-date"><strong>5 月 18 日</strong>当前日期</div>
+                    <div class="timeline-date"><strong>5 月 20 日</strong>当前日期</div>
                     <div class="timeline-date"><strong>5 月 31 日</strong>调研截止</div>
                 </div>
             </div>
@@ -342,7 +342,7 @@
                 <div id="progressList"></div>
             </div>
             <div class="glass-card">
-                <h2 class="section-title">🔍 问卷初步分析（10份已回收）</h2>
+                <h2 class="section-title">🔍 问卷初步分析（11份已回收）</h2>
                 <div class="satisfaction-grid" id="satGrid"></div>
             </div>
             <div class="glass-card">
@@ -400,12 +400,12 @@
             { team: '欧美二组', collected: 4, h1Target: 15, weeklyGain: 1 },
             { team: '亚太一组', collected: 3, h1Target: 15, weeklyGain: 0 },
             { team: '亚太二组', collected: 0, h1Target: 15, weeklyGain: 0 },
-            { team: '欧美三组', collected: 3, h1Target: 15, weeklyGain: 2 }
+            { team: '欧美三组', collected: 4, h1Target: 15, weeklyGain: 3 }
         ];
 
         const surveyStartDate = new Date('2026-04-15');
         const surveyEndDate = new Date('2026-05-31');
-        const currentDate = new Date('2026-05-18');
+        const currentDate = new Date('2026-05-20');
 
         const totalDays = (surveyEndDate - surveyStartDate) / (1000 * 60 * 60 * 24);
         const elapsedDays = (currentDate - surveyStartDate) / (1000 * 60 * 60 * 24);
@@ -504,7 +504,8 @@
             { packaging: 4, unboxing: 4, quality: 4, functions: 5, performance: 4, riding: 5, om: null, firmware: null, docs: 4, issue: 4, spare: 4 },
             { packaging: 5, unboxing: 5, quality: 5, functions: 5, performance: 5, riding: 5, om: 4, firmware: 5, docs: 4, issue: 4, spare: 4 },
             { packaging: 5, unboxing: 5, quality: 2, functions: 3, performance: 3, riding: 4, om: 3, firmware: 4, docs: 3, issue: 1, spare: 4 },
-            { packaging: 2, unboxing: 5, quality: 4, functions: 4, performance: 5, riding: 5, om: 5, firmware: 5, docs: 5, issue: null, spare: 4 }
+            { packaging: 2, unboxing: 5, quality: 4, functions: 4, performance: 5, riding: 5, om: 5, firmware: 5, docs: 5, issue: null, spare: 4 },
+            { packaging: 5, unboxing: 5, quality: null, functions: null, performance: null, riding: null, om: 4, firmware: 4, docs: null, issue: 5, spare: 5 }
         ];
 
         const dimLabels = [
@@ -600,6 +601,7 @@
             { tag: '好评', isNew: false, customer: 'Jet', title: '包装/质量/功能/性能/问题解决均 Very Satisfied', detail: '包装、产品质量、产品功能、产品性能、问题解决均获5分满分', enOriginal: 'Packaging, product quality, product functions, product performance, and issue resolution all rated Very Satisfied (5/5).' },
             { tag: '好评', isNew: false, customer: 'Urent', title: '产品功能/骑行体验 Very Satisfied', detail: '产品功能、骑行体验均获5分满分，无文字投诉', enOriginal: 'Product functions and riding experience both rated Very Satisfied (5/5). No additional text feedback provided.' },
             { tag: '认可', isNew: true, customer: 'Cooltra', title: '包装/开箱均 Very Satisfied；技术文档评价良好', detail: '包装、开箱均获5分满分；技术文档评价为相当完善', enOriginal: 'Packaging and unboxing both rated Very Satisfied (5/5). / The documentation is quite good and complete' },
+            { tag: '好评', isNew: true, customer: 'Ridemovi', title: '包装/开箱/问题解决/备件服务均 Very Satisfied', detail: '4个维度获5分满分，运维和固件4分，无文字投诉', enOriginal: 'Packaging, unboxing, issue resolution, spare parts service all rated Very Satisfied (5/5). No additional text feedback provided.' },
             { tag: '认可', isNew: false, customer: 'Check', title: '技术文档 - 维修说明详细', detail: '维修说明解释得很详细，客户表示满意', enOriginal: 'Repairs are explained in a detailed way, we are happy with that.' },
             { tag: '认可', isNew: false, customer: 'Dott', title: '备件服务 - 合作意愿积极', detail: 'Veeti表示并非不满意，而是希望两家公司更好地协作改进', enOriginal: 'It is not that I am dissatisfied with the service, I just mean that we should have open discussion on how to make it work better in the future！ It should be collaboration between the companies.' }
         ];

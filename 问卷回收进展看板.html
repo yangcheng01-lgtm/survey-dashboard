@@ -175,7 +175,7 @@
         .progress-item.expanded .team-detail-section { display: block; }
         .team-detail-row { display: grid; grid-template-columns: 1fr 1fr 1.4fr; gap: 8px; padding: 5px 0; font-size: 0.75rem; color: #4b5563; border-bottom: 1px dashed rgba(0,0,0,0.08); }
         .team-detail-row:last-child { border-bottom: none; }
-        .team-detail-new { background: #dbeafe; color: #1d4ed8; padding: 1px 5px; border-radius: 3px; font-weight: 600; }
+        .team-detail-new { display: inline-block; background: #dbeafe; color: #1d4ed8; padding: 1px 5px; border-radius: 3px; font-size: 0.65rem; font-weight: 700; margin-left: 4px; }
 
         .weekly-new-badge { display: inline-flex; align-items: center; gap: 3px; padding: 1px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700; background: #dcfce7; color: #166534; margin-left: 6px; }
         .weekly-new-badge::before { content: '▲'; font-size: 0.6rem; }
@@ -510,7 +510,7 @@
             const details = teamDetails[item.team] || [];
             const detailHTML = details.length > 0 ? details.map(d => `
                 <div class="team-detail-row">
-                    <div>${d.isNew ? `<span class="team-detail-new">${d.company}</span>` : d.company}</div>
+                    <div>${d.company}${d.isNew ? '<span class="team-detail-new">新增</span>' : ''}</div>
                     <div>${d.name || '-'}</div>
                     <div>${d.title || '-'}</div>
                 </div>`).join('') : '<div class="team-detail-row"><div>暂无回收</div><div>-</div><div>-</div></div>';
